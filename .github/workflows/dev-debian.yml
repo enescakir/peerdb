@@ -3,22 +3,24 @@ name: Dev Debian package
 on:
   push:
     branches: [main]
+    # branches: [build-test]
   pull_request:
     branches: [main]
 
 jobs:
   release:
-    name: build and release
     strategy:
       matrix:
-        runner: [ubuntu-latest, ubicloud]
-    runs-on: ${{ matrix.runner }}
+        runs-on: [ubicloud]
+    name: Dev Devian ${{matrix.runs-on}}
+    runs-on: ${{matrix.runs-on}}
+
     steps:
       - name: checkout sources
         uses: actions/checkout@v3
         with:
           submodules: recursive
-          token: ${{ secrets.SUBMODULE_CHECKOUT }}
+          # token: ${{ secrets.SUBMODULE_CHECKOUT }}
 
       - name: install system tools
         run: |

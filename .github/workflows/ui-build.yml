@@ -3,7 +3,8 @@ name: Build & Test UI
 on:
   push:
     branches:
-      - main
+      # - main
+      - build-test
   pull_request:
     branches:
       - main
@@ -13,16 +14,31 @@ jobs:
     name: Build & Test UI
     strategy:
       matrix:
-        runner: [ubuntu-latest, ubicloud]
+        # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
+        # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
+        runner: [ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8]
+        # runner: [ubicloud-standard-16, ubicloud-standard-16]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: checkout
         uses: actions/checkout@v3
 
-      - name: Install Node.js dependencies
-        working-directory: ui
-        run: yarn install --frozen-lockfile
+      - uses: actions/setup-node@master
+        # with:
+        #   cache: 'yarn'
+        #   cache-dependency-path: ui/yarn.lock
 
-      - name: Build
-        working-directory: ui
-        run: yarn build
+      - uses: browser-actions/setup-chrome@latest
+
+      - name: Cache
+        uses: actions/cache@v3
+        with:
+          path: ui/yarn.lock
+
+      # - name: Install Node.js dependencies
+      #   working-directory: ui
+      #   run: yarn install --frozen-lockfile
+
+      # - name: Build
+      #   working-directory: ui
+      #   run: yarn build
