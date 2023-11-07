@@ -14,31 +14,36 @@ jobs:
     name: Build & Test UI
     strategy:
       matrix:
-        # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
+        runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
         # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
-        runner: [ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8]
-        # runner: [ubicloud-standard-16, ubicloud-standard-16]
+        # runner: [ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8]
+        # runner: [ubuntu-latest, ubicloud, buildjet-2vcpu-ubuntu-2204]
+        # runner: [ubuntu-latest]
+
     runs-on: ${{ matrix.runner }}
     steps:
+      # - name: docker info
+      #   run: docker info
+
+      # - name: ls -lah /home/runner/
+      #   run: ls -lah /home/runner/
+
+      # - name: ls -lah /home/runner/.docker
+      #   run: ls -lah /home/runner/.docker
+
+      # - name: cat /home/runner/.docker/config.json
+      #   run: cat /home/runner/.docker/config.json 2>/dev/null
+
+      # - name: sleep
+      #   run: sleep 1000000000000
+
       - name: checkout
         uses: actions/checkout@v3
 
-      - uses: actions/setup-node@master
-        # with:
-        #   cache: 'yarn'
-        #   cache-dependency-path: ui/yarn.lock
+      - name: Install Node.js dependencies
+        working-directory: ui
+        run: yarn install --frozen-lockfile
 
-      - uses: browser-actions/setup-chrome@latest
-
-      - name: Cache
-        uses: actions/cache@v3
-        with:
-          path: ui/yarn.lock
-
-      # - name: Install Node.js dependencies
-      #   working-directory: ui
-      #   run: yarn install --frozen-lockfile
-
-      # - name: Build
-      #   working-directory: ui
-      #   run: yarn build
+      - name: Build
+        working-directory: ui
+        run: yarn build
