@@ -14,16 +14,27 @@ jobs:
     name: Build & Test UI
     strategy:
       matrix:
-        runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
-        # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
-        # runner: [ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8]
-        # runner: [ubuntu-latest, ubicloud, buildjet-2vcpu-ubuntu-2204]
-        # runner: [ubuntu-latest]
+        # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
+        # runner: [ubicloud, ubicloud, ubicloud, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-16, ubicloud-standard-16, ubicloud-standard-16]
+        runner: [ubicloud-standard-16, ubicloud-standard-16, ubicloud-standard-16]
+        # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
+        # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-4]
+        # runner: [ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004]
+        # runner: [ubicloud-arm, ubicloud-arm, ubicloud-arm, ubicloud-arm, ubicloud-arm, ubicloud-arm, ubicloud-arm, ubicloud-arm, ubicloud-arm, ubicloud-arm, ubicloud-arm]
 
     runs-on: ${{ matrix.runner }}
     steps:
-      # - name: docker info
-      #   run: docker info
+      - name: uname -mr
+        run: uname -mr
+
+      - name: lsb_release -a
+        run: lsb_release -a
+
+      - name: printenv
+        run: printenv
+
+      # - name: sleep 300
+      #   run: sleep 300
 
       # - name: ls -lah /home/runner/
       #   run: ls -lah /home/runner/
@@ -37,13 +48,23 @@ jobs:
       # - name: sleep
       #   run: sleep 1000000000000
 
-      - name: checkout
-        uses: actions/checkout@v3
+      # - name: checkout
+      #   uses: actions/checkout@v3
 
-      - name: Install Node.js dependencies
-        working-directory: ui
-        run: yarn install --frozen-lockfile
+      # - name: Install Node.js dependencies
+      #   working-directory: ui
+      #   run: yarn install --frozen-lockfile
 
-      - name: Build
-        working-directory: ui
-        run: yarn build
+      # - name: Build
+      #   working-directory: ui
+      #   run: yarn build
+
+      # - name: install fio
+      #   run: |
+      #     sudo apt-get -y install fio
+
+      # - name: run fio
+      #   run: |
+      #     sudo fio --filename=./f --size=2GB --direct=1 --rw=randrw --bs=4k --ioengine=libaio \
+      #       --iodepth=256 --runtime=30 --numjobs=4 --time_based --group_reporting \
+      #       --name=iops-test-job --eta-newline=1
