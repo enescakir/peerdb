@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
-        runner: [ubicloud, ubicloud, ubuntu-latest]
+        runner: [ubicloud, ubicloud-arm, ubuntu-latest]
         # runner: [ubicloud, ubicloud, ubicloud, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-16, ubicloud-standard-16, ubicloud-standard-16]
         # runner: [ubicloud-standard-16-arm, ubicloud-standard-16-arm, ubicloud-standard-16-arm]
         # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
@@ -28,26 +28,28 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
+      - name: rustc --print cfg
+        run: rustc --print cfg
         
-      - name: Add Hetzner apt mirror
-        run: |
-          sudo bash -c 'cat <<EOT > /etc/apt/sources.list.d/hetzner.list
-          # Packages and Updates from the Hetzner Ubuntu Mirror
-          deb http://mirror.hetzner.com/ubuntu/packages jammy           main restricted universe multiverse
-          deb http://mirror.hetzner.com/ubuntu/packages jammy-updates   main restricted universe multiverse
-          deb http://mirror.hetzner.com/ubuntu/packages jammy-backports main restricted universe multiverse
-          deb http://mirror.hetzner.com/ubuntu/packages jammy-security  main restricted universe multiverse
-          EOT'
+      # - name: Add Hetzner apt mirror
+      #   run: |
+      #     sudo bash -c 'cat <<EOT > /etc/apt/sources.list.d/hetzner.list
+      #     # Packages and Updates from the Hetzner Ubuntu Mirror
+      #     deb http://mirror.hetzner.com/ubuntu/packages jammy           main restricted universe multiverse
+      #     deb http://mirror.hetzner.com/ubuntu/packages jammy-updates   main restricted universe multiverse
+      #     deb http://mirror.hetzner.com/ubuntu/packages jammy-backports main restricted universe multiverse
+      #     deb http://mirror.hetzner.com/ubuntu/packages jammy-security  main restricted universe multiverse
+      #     EOT'
 
-          echo "http://mirror.hetzner.com/ubuntu/ priority:0" | sudo tee -a /etc/apt/apt-mirrors.txt
+      #     echo "http://mirror.hetzner.com/ubuntu/ priority:0" | sudo tee -a /etc/apt/apt-mirrors.txt
 
-          sudo apt-get update
+      #     sudo apt-get update
 
-      - name: sudo apt-get update
-        run: sudo apt-get update
+      # - name: sudo apt-get update
+      #   run: sudo apt-get update
 
-      - name: sudo fsck -nf
-        run: sudo fsck -nf
+      # - name: sudo fsck -nf
+      #   run: sudo fsck -nf
 
       - name: uname -mr
         run: uname -mr
@@ -58,32 +60,32 @@ jobs:
       - name: printenv
         run: printenv
 
-      - name: ls -lah
-        run: ls -lah
+      # - name: ls -lah
+      #   run: ls -lah
 
-      - name: docker run -d -v "$(pwd)":/workspace --name alpine alpine tail -f /dev/null
-        run: docker run -d -v "$(pwd)":/workspace --name alpine alpine tail -f /dev/null
+      # - name: docker run -d -v "$(pwd)":/workspace --name alpine alpine tail -f /dev/null
+      #   run: docker run -d -v "$(pwd)":/workspace --name alpine alpine tail -f /dev/null
 
-      - name: docker exec alpine ls -lah
-        run: docker exec alpine ls -lah
+      # - name: docker exec alpine ls -lah
+      #   run: docker exec alpine ls -lah
 
-      - name: docker exec alpine ls -lah /workspace
-        run: docker exec alpine ls -lah /workspace
+      # - name: docker exec alpine ls -lah /workspace
+      #   run: docker exec alpine ls -lah /workspace
 
-      - name: docker exec alpine touch /workspace/test.txt
-        run: docker exec alpine touch /workspace/test.txt
+      # - name: docker exec alpine touch /workspace/test.txt
+      #   run: docker exec alpine touch /workspace/test.txt
 
-      - name: docker exec alpine ls -lah /workspace
-        run: docker exec alpine ls -lah /workspace
+      # - name: docker exec alpine ls -lah /workspace
+      #   run: docker exec alpine ls -lah /workspace
 
-      - name: cat /etc/group
-        run: cat /etc/group
+      # - name: cat /etc/group
+      #   run: cat /etc/group
 
-      - name: groups runner
-        run: groups runner
+      # - name: groups runner
+      #   run: groups runner
 
-      - name: free -h
-        run: free -h
+      # - name: free -h
+      #   run: free -h
 
       # - name: ls -lah /home/runner/
       #   run: ls -lah /home/runner/
