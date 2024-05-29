@@ -15,10 +15,11 @@ jobs:
     env:
       UBICLOUD_CACHE_URL: "http://local.enescakir.com/runtime/github/"
       UBICLOUD_RUNTIME_TOKEN: ${{ secrets.UBICLOUD_RUNTIME_TOKEN }}
+      NODE_EXTRA_CA_CERTS: /home/runner/blob_storage_ca.crt
     strategy:
+      max-parallel: 1
       matrix:
-        # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
-        runner: [ubicloud]
+        runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
         # runner: [ubicloud, ubicloud-arm, ubuntu-latest]
         # runner: [ubicloud, ubicloud, ubicloud, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-16, ubicloud-standard-16, ubicloud-standard-16]
         # runner: [ubicloud-standard-16-arm, ubicloud-standard-16-arm, ubicloud-standard-16-arm]
@@ -32,12 +33,18 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
 
+      - name: setup root cert
+        run: |
+          cat <<EOT > /home/runner/blob_storage_ca.crt
+          ${{ secrets.MINIO_ROOT_CERTIFICATES }}
+          EOT
+
       - name: Ubicloud Cache
         id: cache
         uses: enescakir/cache@ubicloud-cache
         with:
           path: 1GB.bin
-          key: 1GB-cache-4-${{ matrix.runner }}
+          key: 1GB-cache-6-${{ matrix.runner }}
 
       # - name: Actions Cache
       #   uses: actions/cache@v4
