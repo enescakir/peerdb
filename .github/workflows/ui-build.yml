@@ -17,9 +17,9 @@ jobs:
       UBICLOUD_RUNTIME_TOKEN: ${{ secrets.UBICLOUD_RUNTIME_TOKEN }}
       NODE_EXTRA_CA_CERTS: /home/runner/blob_storage_ca.crt
     strategy:
-      max-parallel: 1
       matrix:
-        runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
+        runner: [ubicloud]
+        # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
         # runner: [ubicloud, ubicloud-arm, ubuntu-latest]
         # runner: [ubicloud, ubicloud, ubicloud, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-16, ubicloud-standard-16, ubicloud-standard-16]
         # runner: [ubicloud-standard-16-arm, ubicloud-standard-16-arm, ubicloud-standard-16-arm]
@@ -43,8 +43,8 @@ jobs:
         id: cache
         uses: enescakir/cache@ubicloud-cache
         with:
-          path: 1GB.bin
-          key: 1GB-cache-6-${{ matrix.runner }}
+          path: 10GB.bin
+          key: 10GB-cache-1-${{ matrix.runner }}
 
       # - name: Actions Cache
       #   uses: actions/cache@v4
@@ -55,10 +55,10 @@ jobs:
       - name: download-test file
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          wget http://hel.icmp.hetzner.com/1GB.bin
+          wget http://hel.icmp.hetzner.com/10GB.bin
 
       - name: check file size
-        run: du -sh 1GB.bin
+        run: du -sh 10GB.bin
 
       - name: check file checksum
-        run: sha256sum 1GB.bin
+        run: sha256sum 10GB.bin
