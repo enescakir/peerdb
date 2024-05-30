@@ -17,8 +17,9 @@ jobs:
       UBICLOUD_RUNTIME_TOKEN: ${{ secrets.UBICLOUD_RUNTIME_TOKEN }}
       NODE_EXTRA_CA_CERTS: /home/runner/blob_storage_ca.crt
     strategy:
+      max-parallel: 1
       matrix:
-        runner: [ubicloud]
+        runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
         # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
         # runner: [ubicloud, ubicloud-arm, ubuntu-latest]
         # runner: [ubicloud, ubicloud, ubicloud, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-16, ubicloud-standard-16, ubicloud-standard-16]
