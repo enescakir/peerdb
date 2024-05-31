@@ -19,8 +19,9 @@ jobs:
     strategy:
       # max-parallel: 1
       matrix:
+        runner: [ubicloud]
         # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
-        runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
+        # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
         # runner: [ubicloud, ubicloud-arm, ubuntu-latest]
         # runner: [ubicloud, ubicloud, ubicloud, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-16, ubicloud-standard-16, ubicloud-standard-16]
         # runner: [ubicloud-standard-16-arm, ubicloud-standard-16-arm, ubicloud-standard-16-arm]
@@ -45,7 +46,7 @@ jobs:
         uses: enescakir/cache@ubicloud-cache
         with:
           path: 10GB.bin
-          key: 10GB-cache-1-${{ matrix.runner }}
+          key: 10GB-cache-3-${{ matrix.runner }}
 
       # - name: Actions Cache
       #   uses: actions/cache@v4
