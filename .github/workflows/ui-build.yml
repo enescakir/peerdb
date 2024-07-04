@@ -1,66 +1,31 @@
-name: Build & Test UI
-
+name: Benchmark cache
 on:
   push:
     branches:
-      # - main
-      - build-test
-  pull_request:
-    branches:
-      - main
+      - cache-test
 
 jobs:
-  build-test:
-    name: Build & Test UI
-    env:
-      UBICLOUD_CACHE_URL: "http://local.enescakir.com/runtime/github/"
-      UBICLOUD_RUNTIME_TOKEN: ${{ secrets.UBICLOUD_RUNTIME_TOKEN }}
-      NODE_EXTRA_CA_CERTS: /home/runner/blob_storage_ca.crt
+  save_cache:
+    name: ${{ matrix.runner }}
     strategy:
-      # max-parallel: 1
       matrix:
-        # runner: [ubicloud]
-        # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
-        runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
-        # runner: [ubicloud, ubicloud-arm, ubuntu-latest]
-        # runner: [ubicloud, ubicloud, ubicloud, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-16, ubicloud-standard-16, ubicloud-standard-16]
-        # runner: [ubicloud-standard-16-arm, ubicloud-standard-16-arm, ubicloud-standard-16-arm]
-        # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
-        # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-4]
-        # runner: [ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004, ubicloud-standard-16-ubuntu-2004]
-        # runner: [ubicloud-arm, ubicloud-arm, ubicloud-arm, ubicloud-arm, ubicloud-arm, ubicloud-arm, ubicloud-arm, ubicloud-arm, ubicloud-arm, ubicloud-arm, ubicloud-arm]
+        index: [1]
+        runner: [ubicloud]
 
     runs-on: ${{ matrix.runner }}
     steps:
-      - name: checkout
-        uses: actions/checkout@v4
-
-      - name: setup root cert
-        run: |
-          cat <<EOT > /home/runner/blob_storage_ca.crt
-          ${{ secrets.MINIO_ROOT_CERTIFICATES }}
-          EOT
-
-      - name: Ubicloud Cache
-        id: cache
-        uses: enescakir/cache@ubicloud-cache
+      - run: sleep 10
+      - name: ubicloud/cache@v4
+        id: cache-ubicloud
+        uses: ubicloud/cache@v4
         with:
-          path: 10GB.bin
-          key: 10GB-cache-3-${{ matrix.runner }}
+          path: test-file 
+          key: test-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.runner }}-${{ matrix.index }}
 
-      # - name: Actions Cache
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: 1GB.bin
-      #     key: 1GB-cache-4-${{ matrix.runner }}
+      - name: Generate test file if cache miss
+        run: dd if=/dev/urandom of=test-file bs=1M count=435
 
-      - name: download-test file
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          wget http://hel.icmp.hetzner.com/10GB.bin
-
-      - name: check file size
-        run: du -sh 10GB.bin
-
-      - name: check file checksum
-        run: sha256sum 10GB.bin
+      - name: Verify file
+        run: | 
+          ls -lah test-file
+          sha256sum test-file
