@@ -12,16 +12,12 @@ on:
 jobs:
   build-test:
     name: Build & Test UI
-    env:
-      UBICLOUD_CACHE_URL: "http://local.enescakir.com/runtime/github/"
-      UBICLOUD_RUNTIME_TOKEN: ${{ secrets.UBICLOUD_RUNTIME_TOKEN }}
-      NODE_EXTRA_CA_CERTS: /home/runner/blob_storage_ca.crt
     strategy:
       # max-parallel: 1
       matrix:
-        # runner: [ubicloud]
+        runner: [ubicloud]
         # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
-        runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
+        # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
         # runner: [ubicloud, ubicloud-arm, ubuntu-latest]
         # runner: [ubicloud, ubicloud, ubicloud, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-16, ubicloud-standard-16, ubicloud-standard-16]
         # runner: [ubicloud-standard-16-arm, ubicloud-standard-16-arm, ubicloud-standard-16-arm]
@@ -35,32 +31,24 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
 
-      - name: setup root cert
-        run: |
-          cat <<EOT > /home/runner/blob_storage_ca.crt
-          ${{ secrets.MINIO_ROOT_CERTIFICATES }}
-          EOT
+      - name: check disk
+        run: df -h
 
-      - name: Ubicloud Cache
-        id: cache
-        uses: enescakir/cache@ubicloud-cache
-        with:
-          path: 10GB.bin
-          key: 10GB-cache-3-${{ matrix.runner }}
+      - name: install stress
+        run: sudo apt-get install stress
 
-      # - name: Actions Cache
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: 1GB.bin
-      #     key: 1GB-cache-4-${{ matrix.runner }}
+      - name: create stress
+        run: sudo stress --vm 6 --vm-bytes 1024M --hdd 5 --hdd-bytes 25G --vm-hang 0 --vm-keep --timeout 300s &
 
-      - name: download-test file
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          wget http://hel.icmp.hetzner.com/10GB.bin
+      # - name: fill the disk
+      #   run: sudo dd if=/dev/zero of=/tmp/disk-fill bs=1M count=27200
 
-      - name: check file size
-        run: du -sh 10GB.bin
+      - name: check disk
+        run: df -h
 
-      - name: check file checksum
-        run: sha256sum 10GB.bin
+      - name: check memory
+        run: free | awk 'NR==2 {print $4}'
+
+      - name: docker
+        run: docker build . -t test
+
