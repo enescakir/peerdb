@@ -15,9 +15,9 @@ jobs:
     strategy:
       # max-parallel: 1
       matrix:
-        runner: [ubicloud]
+        # runner: [ubicloud]
         # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
-        # runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
+        runner: [ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud, ubicloud]
         # runner: [ubicloud, ubicloud-arm, ubuntu-latest]
         # runner: [ubicloud, ubicloud, ubicloud, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-4, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-8, ubicloud-standard-16, ubicloud-standard-16, ubicloud-standard-16]
         # runner: [ubicloud-standard-16-arm, ubicloud-standard-16-arm, ubicloud-standard-16-arm]
@@ -31,23 +31,23 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
 
-      - name: check disk
-        run: df -h
+      # - name: check disk
+      #   run: df -h
 
-      - name: install stress
-        run: sudo apt-get install stress
+      # - name: install stress
+      #   run: sudo apt-get install stress
 
-      - name: create stress
-        run: sudo stress --vm 6 --vm-bytes 1024M --hdd 5 --hdd-bytes 25G --vm-hang 0 --vm-keep --timeout 300s &
+      # - name: create stress
+      #   run: sudo stress --vm 6 --vm-bytes 1024M --hdd 5 --hdd-bytes 25G --vm-hang 0 --vm-keep --timeout 300s &
 
       # - name: fill the disk
       #   run: sudo dd if=/dev/zero of=/tmp/disk-fill bs=1M count=27200
 
-      - name: check disk
-        run: df -h
+      # - name: check disk
+      #   run: df -h
 
-      - name: check memory
-        run: free | awk 'NR==2 {print $4}'
+      # - name: check memory
+      #   run: free | awk 'NR==2 {print $4}'
 
       - name: docker
         run: docker build . -t test
