@@ -9,21 +9,21 @@ jobs:
     name: ${{ matrix.runner }}
     strategy:
       matrix:
-        index: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-        runner: [ubuntu-latest]
+        index: [1, 2, 3]
+        runner: [ubicloud]
 
     runs-on: ${{ matrix.runner }}
     steps:
       - run: sleep 10
-      - name: actions/cache@v4
+      - name: ubicloud/cache@new-version
         id: cache-ubicloud
-        uses: actions/cache@v4
+        uses: ubicloud/cache@new-version
         with:
           path: test-file 
           key: test-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.runner }}-${{ matrix.index }}
 
       - name: Generate test file if cache miss
-        run: dd if=/dev/urandom of=test-file bs=1M count=1000
+        run: dd if=/dev/urandom of=test-file bs=1M count=100
 
       - name: Verify file
         run: | 
